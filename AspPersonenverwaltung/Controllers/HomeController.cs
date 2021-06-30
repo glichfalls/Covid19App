@@ -18,7 +18,11 @@ namespace Covid19App.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Reports.Include(x=>x.Country).ToListAsync());
+            return View(await _context.Reports
+                .Include(x=> x.Country)
+                .ThenInclude(x => x.Continent)
+                .ToListAsync()
+            );
         }
 
         public IActionResult Statistics()

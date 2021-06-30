@@ -63,9 +63,13 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.Vaccinations)
                     </td>
-                    <td>
-                        <a asp-controller="Report" asp-action="Edit" asp-route-id="@item.Id"><img id="iconSize" src="~/images/Document/EditNews.png" title="Bearbeiten" /></a> |
-                        <a asp-controller="Report" asp-action="Delete" asp-route-id="@item.Id"><img id="iconSize" src="~/images/Document/DeleteNews.png" title="Löschen" /></a>
+                    <td class="text-right">
+                        <a class="btn btn-sm btn-primary" asp-controller="Report" asp-action="Edit" asp-route-id="@item.Id">
+                            Bearbeiten
+                        </a>
+                        <a class="btn btn-sm btn-danger" asp-controller="Report" asp-action="Delete" asp-route-id="@item.Id">
+                            Löschen
+                        </a>
                     </td>
                 </tr>
             }

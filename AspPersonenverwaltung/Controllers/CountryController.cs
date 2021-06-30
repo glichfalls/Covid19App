@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Covid19App.Data;
 using Covid19App.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -23,21 +24,15 @@ namespace Covid19App.Controllers
             {
                 return RedirectToAction("Error", "Home");
             }
-
-            var country = new Country();
-            ViewBag.Continents = new SelectList(_context.Continents, "Id", "Name", _context.Continents.FirstOrDefault().Name);
-            return View(country);
+            ViewBag.Continents = new SelectList(_context.Continents, "Id", "Name");
+            return View();
         }
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name")] Country country)
+        public async Task<IActionResult> Create([Bind("IsoCode,Name,Population,ContinentId")] Country country)
         {
-            country.Continent = _context.Continents.FirstOrDefault(x => x.Id == country.Continent.Id);
-            if (country.Continent != null)
-            {
-                country.ContinentId = country.Continent.Id;
-            }
+            Console.WriteLine(country.ToString());
             if (!ModelState.IsValid)
             {
                 return View(country);
@@ -70,10 +65,21 @@ namespace Covid19App.Controllers
             {
                 return NotFound();
             }
+            
+            country.Continent = _context.Continents.FirstOrDefault(x => x.Id == country.Continent.Id);
+
+            if (country.Continent != null)
+            {
+                country.ContinentId = country.Continent.Id;
+            }
+            else
+            {
+                return View();
+            }
 
             if (!ModelState.IsValid)
             {
-                return View(country);
+                return View();
             }
             
             try
@@ -109,8 +115,7 @@ namespace Covid19App.Controllers
 
             return View(country);
         }
-
-        // POST: Project/Delete/5
+        
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -125,14 +130,12 @@ namespace Covid19App.Controllers
         {
             return _context.Countries.Any(e => e.Id == id);
         }
-
-        // GET: Project
+        
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Countries.ToListAsync());
+            return View(await _context.Countries.Include(x => x.Continent).ToListAsync());
         }
-
-        // GET: Project/Details/5
+        
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)

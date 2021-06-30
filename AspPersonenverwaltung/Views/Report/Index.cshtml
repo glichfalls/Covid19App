@@ -1,35 +1,79 @@
 ﻿@model IEnumerable<Covid19App.Models.Report>
-
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Home Page";
 }
 
-<h2>Index</h2>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Date)
-        </th>
-        <th></th>
-    </tr>
-    </thead>
-    <tbody>
-    @foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Date)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-    }
-    </tbody>
-</table>
+<h3>Reporting</h3>
+
+<a class="btn btn-primary" asp-action="Create" asp-controller="Report">Reporting erfassen</a>
+
+<div class="row">
+    <div class="col-md-12">
+        
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Country.Continent.Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Country.Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Date)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Cases)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Deaths)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Tests)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Vaccinations)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Country.Continent.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Country.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Cases)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Deaths)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Tests)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Vaccinations)
+                    </td>
+                    <td class="text-right">
+                        <a class="btn btn-sm btn-primary" asp-controller="Report" asp-action="Edit" asp-route-id="@item.Id">
+                            Bearbeiten
+                        </a>
+                        <a class="btn btn-sm btn-danger" asp-controller="Report" asp-action="Delete" asp-route-id="@item.Id">
+                            Löschen
+                        </a>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>
