@@ -37,7 +37,7 @@ namespace AspPersonenverwaltung.Controllers
             {
                 _context.Add(report);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("MasterData", "Home");
+                return RedirectToAction("Index");
             }
             return View(report);
         }
@@ -84,7 +84,7 @@ namespace AspPersonenverwaltung.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction("MasterData", "Home");
+                return RedirectToAction("Index");
             }
             return View(report);
         }
@@ -113,7 +113,7 @@ namespace AspPersonenverwaltung.Controllers
             var report = await _context.Reports.FindAsync(id);
             _context.Reports.Remove(report);
             await _context.SaveChangesAsync();
-            return RedirectToAction("MasterData", "Home");
+            return RedirectToAction("Index");
         }
 
         private bool ReportExists(int id)

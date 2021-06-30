@@ -53,16 +53,12 @@ namespace AspPersonenverwaltung.Controllers
             {
                 return NotFound();
             }
-            
-            var country = _context.Countries.Include(x => x.Continent).SingleOrDefault(x => x.Id == id);
-            
+            var country = _context.Countries.Find(id);
             if (country == null)
             {
                 return NotFound();
             }
-            
-            ViewBag.Continents = new SelectList(_context.Continents, "Id", "Name", country.Continent.Name);
-
+            ViewBag.Continents = new SelectList(_context.Continents, "Id", "Name", country.ContinentId);
             return View(country);
         }
         
@@ -96,8 +92,7 @@ namespace AspPersonenverwaltung.Controllers
             return RedirectToAction("Index");
             
         }
-
-        // GET: Project/Delete/5
+        
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -123,7 +118,7 @@ namespace AspPersonenverwaltung.Controllers
             var country = await _context.Countries.FindAsync(id);
             _context.Countries.Remove(country);
             await _context.SaveChangesAsync();
-            return RedirectToAction("MasterData", "Home");
+            return RedirectToAction("Index");
         }
 
         private bool CountryExists(int id)

@@ -21,17 +21,6 @@ namespace AspPersonenverwaltung.Controllers
             return View(await _context.Reports.Include(x=>x.Country).ToListAsync());
         }
 
-        public IActionResult MasterData()
-        {
-            var model = new MasterDataViewModel()
-            {
-                ContinentList = _context.Continents.ToList(),
-                CountryList = _context.Countries.ToList(),
-                ReportList = _context.Reports.ToList()
-            };
-            return View(model);
-        }
-
         public IActionResult Statistics()
         {
             if (!_context.Continents.Any() || !_context.Countries.Any() || !_context.Reports.Any())
