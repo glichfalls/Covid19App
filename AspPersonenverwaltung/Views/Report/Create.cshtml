@@ -5,29 +5,81 @@
 }
 
 <h3>Bericht Erstellen</h3>
-<hr />
+
+<hr/>
+
 <div class="row">
     <form asp-action="Create">
-        <div class="col-md-4">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="col-md-6">
             <div class="form-group">
                 <label asp-for="Date" class="control-label"></label>
-                <input asp-for="Date" class="form-control" />
+                <input asp-for="Date" class="form-control"/>
                 <span asp-validation-for="Date" class="text-danger"></span>
             </div>
         </div>
-        <hr />
-        <div class="col-xs-12">
+
+        <div class="col-md-6">
             <div class="form-group">
-                <input type="submit" value="Speichern" class="btn btn-primary" />
-            </div>
-            <div style="float:left">
-                <a asp-controller="Home" asp-action="MasterData">zurück zur Liste</a>
+                <label asp-for="Country" class="control-label"></label>
+                <select asp-for="Country.Id" asp-items="@ViewBag.Countries" class="form-control"></select>
+                <input asp-for="Country.Id" class="form-control" type="hidden"/>
+                <span asp-validation-for="Country.Name" class="text-danger"></span>
             </div>
         </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="Cases" class="control-label"></label>
+                <input asp-for="Cases" class="form-control"/>
+                <span asp-validation-for="Cases" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="Deaths" class="control-label"></label>
+                <input asp-for="Deaths" class="form-control"/>
+                <span asp-validation-for="Deaths" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="Tests" class="control-label"></label>
+                <input asp-for="Tests" class="form-control"/>
+                <span asp-validation-for="Tests" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="Vaccinations" class="control-label"></label>
+                <input asp-for="Vaccinations" class="form-control"/>
+                <span asp-validation-for="Vaccinations" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="ReproductionRate" class="control-label"></label>
+                <input asp-for="ReproductionRate" class="form-control"/>
+                <span asp-validation-for="ReproductionRate" class="text-danger"></span>
+            </div>
+        </div>
+        
+        <hr/>
+
+        <div class="col-xs-12">
+            <input type="submit" value="Speichern" class="btn btn-primary"/>
+            <a class="btn btn-danger" asp-action="Index">Abbrechen</a>
+        </div>
+        
     </form>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 }

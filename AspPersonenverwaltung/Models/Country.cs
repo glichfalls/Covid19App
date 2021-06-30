@@ -14,7 +14,6 @@ namespace AspPersonenverwaltung.Models
         public string Name { get; set; }
         
         [Display(Name = "ISO Code")]
-        [Required(ErrorMessage = "Der Länder ISO Code ist erforderlich!")]
         public string IsoCode { get; set; }
         
         [Display(Name = "Anzahl Einwohner")]

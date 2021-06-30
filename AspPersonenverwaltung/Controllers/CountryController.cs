@@ -25,7 +25,7 @@ namespace AspPersonenverwaltung.Controllers
             }
 
             var country = new Country();
-            ViewBag.Countries = new SelectList(_context.Continents, "Id", "Name", _context.Continents.FirstOrDefault().Name);
+            ViewBag.Continents = new SelectList(_context.Continents, "Id", "Name", _context.Continents.FirstOrDefault().Name);
             return View(country);
         }
         
@@ -33,6 +33,11 @@ namespace AspPersonenverwaltung.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name")] Country country)
         {
+            country.Continent = _context.Continents.FirstOrDefault(x => x.Id == country.Continent.Id);
+            if (country.Continent != null)
+            {
+                country.ContinentId = country.Continent.Id;
+            }
             if (!ModelState.IsValid)
             {
                 return View(country);
@@ -41,53 +46,55 @@ namespace AspPersonenverwaltung.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
-
-        // GET: Project/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        
+        public IActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
-
-            var country = await _context.Countries.FindAsync(id);
+            
+            var country = _context.Countries.Include(x => x.Continent).SingleOrDefault(x => x.Id == id);
+            
             if (country == null)
             {
                 return NotFound();
             }
+            
+            ViewBag.Continents = new SelectList(_context.Continents, "Id", "Name", country.Continent.Name);
+
             return View(country);
         }
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] Country country)
+        public async Task<IActionResult> Edit(int id, Country country)
         {
             if (id != country.Id)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(country);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!CountryExists(country.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction("MasterData", "Home");
+                return View(country);
             }
-            return View(country);
+            
+            try
+            {
+                _context.Update(country);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!CountryExists(country.Id))
+                {
+                    return NotFound();
+                }
+            }
+            
+            return RedirectToAction("Index");
+            
         }
 
         // GET: Project/Delete/5

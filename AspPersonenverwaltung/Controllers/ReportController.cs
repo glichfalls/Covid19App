@@ -3,6 +3,7 @@ using AspPersonenverwaltung.Data;
 using AspPersonenverwaltung.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace AspPersonenverwaltung.Controllers
@@ -18,7 +19,14 @@ namespace AspPersonenverwaltung.Controllers
         
         public IActionResult Create()
         {
-            return View();
+            if (!_context.Countries.Any())
+            {
+                return RedirectToAction("Error", "Home");
+            }
+
+            var report = new Report();
+            ViewBag.Countries = new SelectList(_context.Countries, "Id", "Name", _context.Countries.FirstOrDefault().Name);
+            return View(report);
         }
         
         [HttpPost]
