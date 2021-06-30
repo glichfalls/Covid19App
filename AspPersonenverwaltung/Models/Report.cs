@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace AspPersonenverwaltung.Models
+namespace Covid19App.Models
 {
     public class Report
     {

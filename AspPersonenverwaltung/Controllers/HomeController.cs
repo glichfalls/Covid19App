@@ -1,12 +1,12 @@
 ﻿using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using AspPersonenverwaltung.Data;
+using Covid19App.Data;
 using Microsoft.AspNetCore.Mvc;
-using AspPersonenverwaltung.Models;
+using Covid19App.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace AspPersonenverwaltung.Controllers
+namespace Covid19App.Controllers
 {
     public class HomeController : Controller
     {

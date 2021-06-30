@@ -1,8 +1,8 @@
-﻿using AspPersonenverwaltung.Models;
+﻿using Covid19App.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace AspPersonenverwaltung.Data
+namespace Covid19App.Data
 {
     public class ApplicationDbContext : IdentityDbContext
     {

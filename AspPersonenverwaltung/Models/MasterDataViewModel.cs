@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace AspPersonenverwaltung.Models
+namespace Covid19App.Models
 {
     public class MasterDataViewModel
     {

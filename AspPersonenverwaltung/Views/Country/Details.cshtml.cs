@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace AspPersonenverwaltung.Views.Country
+namespace Covid19App.Views.Country
 {
     public class Details : PageModel
     {

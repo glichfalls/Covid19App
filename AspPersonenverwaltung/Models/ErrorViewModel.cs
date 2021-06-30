@@ -1,6 +1,6 @@
 using System;
 
-namespace AspPersonenverwaltung.Models
+namespace Covid19App.Models
 {
     public class ErrorViewModel
     {

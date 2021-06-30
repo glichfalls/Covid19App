@@ -1,12 +1,12 @@
 ﻿using System.Threading.Tasks;
-using AspPersonenverwaltung.Data;
-using AspPersonenverwaltung.Models;
+using Covid19App.Data;
+using Covid19App.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
-namespace AspPersonenverwaltung.Controllers
+namespace Covid19App.Controllers
 {
     public class CountryController : Controller
     {

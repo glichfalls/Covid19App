@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace AspPersonenverwaltung.Migrations
+namespace Covid19App.Migrations
 {
     public partial class updates : Migration
     {

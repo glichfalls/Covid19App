@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Runtime.CompilerServices;
 
-namespace AspPersonenverwaltung.Models
+namespace Covid19App.Models
 {
     public class Continent
     {
