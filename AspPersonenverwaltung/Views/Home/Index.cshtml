@@ -1,0 +1,74 @@
+﻿@model IEnumerable<AspPersonenverwaltung.Models.Report>
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+
+<h3>Reporting</h3>
+<div class="row">
+    <div class="col-md-12">
+        <div>
+            <a asp-action="Create" asp-controller="Report"><img id="iconSize" src="~/images/Document/AddNews.png" title="Erstellen" /></a>
+        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Country.Continent.Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Country.Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Date)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Cases)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Deaths)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Tests)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Vaccinations)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Country.Continent.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Country.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Cases)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Deaths)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Tests)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Vaccinations)
+                    </td>
+                    <td>
+                        <a asp-controller="Report" asp-action="Edit" asp-route-id="@item.Id"><img id="iconSize" src="~/images/Document/EditNews.png" title="Bearbeiten" /></a> |
+                        <a asp-controller="Report" asp-action="Delete" asp-route-id="@item.Id"><img id="iconSize" src="~/images/Document/DeleteNews.png" title="Löschen" /></a>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>

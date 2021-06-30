@@ -1,0 +1,27 @@
+﻿@model AspPersonenverwaltung.Models.Continent
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div>
+
+    <h2>Details</h2>
+    
+    <hr/>
+
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+    </dl>
+
+</div>
+
+<div>
+    <a class="btn btn-sm btn-primary" asp-action="Edit" asp-route-id="@Model.Id">Bearbeiten</a>
+    <a class="btn btn-sm btn-warning" asp-action="Index">Zurück</a>
+</div>

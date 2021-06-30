@@ -1,0 +1,90 @@
+﻿@model AspPersonenverwaltung.Models.StatisticsViewModel
+@{
+    ViewData["Title"] = "Statistics";
+}
+<script src="~/myLib/js/gLoader.js"></script>
+<script type="text/javascript" >
+    google.charts.load("current", {packages:["corechart"]});
+
+    google.charts.setOnLoadCallback(drawChartPie);
+    function drawChartPie() {
+        var data = google.visualization.arrayToDataTable([
+            ['Task', 'Hours per Day'],
+
+            @foreach (var item in Model.StatisticList.Where(x=>x.Table.Equals("Abteilung")))
+            {
+                if (item == Model.StatisticList.Last(x => x.Table.Equals("Abteilung")))
+                {
+                     <text>
+                         ['@item.Theme', @item.Count]
+                     </text>
+                }
+                else
+                {
+                    <text>
+                        ['@item.Theme', @item.Count],
+                    </text>
+                }
+            }
+        ]);
+
+        var options = {
+            title: 'Abteilung / Person',
+            is3D: true
+        };
+
+                var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
+                chart.draw(data, options);
+    }
+
+    google.charts.setOnLoadCallback(drawChartColumn);
+    function drawChartColumn() {
+        var data = google.visualization.arrayToDataTable([
+            ["Element", "Personen", { role: "style" }],
+
+            @foreach (var item in Model.StatisticList.Where(x=>x.Table.Equals("Projekt")))
+            {
+                if (item == Model.StatisticList.Last(x => x.Table.Equals("Projekt")))
+                {
+                     <text>
+                        ['@item.Theme', @item.Count, "blue"]
+                     </text>
+                }
+                else
+                {
+                    <text>
+                        ['@item.Theme', @item.Count, "blue"],
+                    </text>
+                }
+            }
+        ]);
+
+        var view = new google.visualization.DataView(data);
+        view.setColumns([0, 1,
+            { calc: "stringify",
+                sourceColumn: 1,
+                type: "string",
+                role: "annotation" },
+            2]);
+
+        var options = {
+            title: "Personen / Projekte",
+            width: 600,
+            height: 400,
+            bar: {groupWidth: "95%"},
+            legend: { position: "none" }
+        };
+        var chart = new google.visualization.ColumnChart(document.getElementById("columnchart_values"));
+        chart.draw(view, options);
+    }
+</script>
+<h2>Statistics</h2>
+<div class="row">
+    <div class="col-md-6">
+        <div id="piechart_3d" style="height: 500px;"></div>
+    </div>
+    <div class="col-md-6">
+        <div id="columnchart_values" style="height: 300px;"></div>
+    </div>
+</div>
+
