@@ -23,25 +23,30 @@ namespace Covid19App.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name")] Continent continent)
+        public IActionResult Create(Continent continent)
         {
-            if (!ModelState.IsValid || ContinentNameExists(continent.Name))
+            if (ContinentNameExists(continent))
+            {
+                ModelState.AddModelError(string.Empty, $"Der Name {continent.Name} existiert bereits.");
+                return View(continent);
+            }
+            if (!ModelState.IsValid)
             {
                 return View(continent);
             }
             _context.Add(continent);
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
             return RedirectToAction("Index");
         }
         
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var continent = await _context.Continents.FindAsync(id);
+            var continent = _context.Continents.Find(id);
             if (continent == null)
             {
                 return NotFound();
@@ -51,7 +56,7 @@ namespace Covid19App.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] Continent continent)
+        public IActionResult Edit(int id, Continent continent)
         {
             if (id != continent.Id)
             {
@@ -63,10 +68,16 @@ namespace Covid19App.Controllers
                 return View(continent);
             }
             
+            if (ContinentNameExists(continent))
+            {
+                ModelState.AddModelError(string.Empty, $"Der Name {continent.Name} existiert bereits.");
+                return View(continent);
+            }
+            
             try
             {
                 _context.Update(continent);
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -78,15 +89,14 @@ namespace Covid19App.Controllers
             return RedirectToAction("Index");
         }
         
-        public async Task<IActionResult> Delete(int? id)
+        public IActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var continent = await _context.Continents
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var continent = _context.Continents.FirstOrDefault(m => m.Id == id);
             if (continent == null)
             {
                 return NotFound();
@@ -97,11 +107,11 @@ namespace Covid19App.Controllers
         
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(int id)
         {
-            var continent = await _context.Continents.FindAsync(id);
+            var continent = _context.Continents.Find(id);
             _context.Continents.Remove(continent);
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
             return RedirectToAction("Index");
         }
 
@@ -110,25 +120,19 @@ namespace Covid19App.Controllers
             return _context.Continents.Any(e => e.Id == id);
         }
 
-        private bool ContinentNameExists(string name)
+        public IActionResult Index()
         {
-            return _context.Continents.Any(e => e.Name == name);
+            return View(_context.Continents.ToList());
         }
         
-        public async Task<IActionResult> Index()
-        {
-            return View(await _context.Continents.ToListAsync());
-        }
-        
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var continent = await _context.Continents
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var continent = _context.Continents.FirstOrDefault(m => m.Id == id);
             if (continent == null)
             {
                 return NotFound();
@@ -136,5 +140,11 @@ namespace Covid19App.Controllers
 
             return View(continent);
         }
+        
+        private bool ContinentNameExists(Continent continent)
+        {
+            return _context.Continents.Any(e => e.Name == continent.Name && e.Id != continent.Id);
+        }
+        
     }
 }

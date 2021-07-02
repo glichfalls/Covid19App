@@ -17,45 +17,57 @@ namespace Covid19App.Controllers
         {
             _context = context;
         }
-        
+
         public IActionResult Create()
         {
             if (!_context.Continents.Any())
             {
                 return RedirectToAction("Error", "Home");
             }
+
             ViewBag.Continents = new SelectList(_context.Continents, "Id", "Name");
             return View();
         }
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(Country country)
         {
+            if (CountryExists(country))
+            {
+                ViewBag.Continents = new SelectList(_context.Continents, "Id", "Name");
+                ModelState.AddModelError(string.Empty,
+                    $"Das Land {country.Name} / {country.IsoCode} existiert bereits.");
+                return View(country);
+            }
+
             if (!ModelState.IsValid)
             {
                 return View(country);
             }
+
             _context.Add(country);
             _context.SaveChanges();
             return RedirectToAction("Index");
         }
-        
+
         public IActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
+
             var country = _context.Countries.Find(id);
             if (country == null)
             {
                 return NotFound();
             }
+
             ViewBag.Continents = new SelectList(_context.Continents, "Id", "Name", country.ContinentId);
             return View(country);
         }
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Edit(int id, Country country)
@@ -64,25 +76,25 @@ namespace Covid19App.Controllers
             {
                 return NotFound();
             }
+
+            if (CountryExists(country))
+            {
+                ViewBag.Continents = new SelectList(_context.Continents, "Id", "Name");
+                ModelState.AddModelError(string.Empty,
+                    $"Das Land {country.Name} / {country.IsoCode} existiert bereits.");
+                return View(country);
+            }
+
             if (!ModelState.IsValid)
             {
                 return View();
             }
-            try
-            {
-                _context.Update(country);
-                _context.SaveChanges();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CountryExists(country.Id))
-                {
-                    return NotFound();
-                }
-            }
+
+            _context.Update(country);
+            _context.SaveChanges();
             return RedirectToAction("Index");
         }
-        
+
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -99,7 +111,7 @@ namespace Covid19App.Controllers
 
             return View(country);
         }
-        
+
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -110,16 +122,11 @@ namespace Covid19App.Controllers
             return RedirectToAction("Index");
         }
 
-        private bool CountryExists(int id)
-        {
-            return _context.Countries.Any(e => e.Id == id);
-        }
-        
         public async Task<IActionResult> Index()
         {
             return View(await _context.Countries.Include(x => x.Continent).ToListAsync());
         }
-        
+
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -136,5 +143,12 @@ namespace Covid19App.Controllers
 
             return View(country);
         }
+
+        private bool CountryExists(Country country)
+        {
+            return _context.Countries.Any(e =>
+                e.Id != country.Id && (country.Name == e.Name || country.IsoCode == e.IsoCode));
+        }
+        
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Covid19App.Data;
 using Covid19App.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -31,6 +32,12 @@ namespace Covid19App.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(Report report)
         {
+            if (DateExists(report))
+            {
+                ViewBag.Countries = new SelectList(_context.Countries, "Id", "Name");
+                ModelState.AddModelError(string.Empty, $"Für {_context.Countries.Find(report.CountryId).Name} wurde {report.Date.ToString("d.MM.yyyy")} bereits registriert");
+                return View(report);
+            }
             if (!ModelState.IsValid)
             {
                 return View(report);
@@ -52,7 +59,7 @@ namespace Covid19App.Controllers
             {
                 return NotFound();
             }
-
+            ViewBag.Countries = new SelectList(_context.Countries, "Id", "Name");
             return View(report);
         }
 
@@ -63,6 +70,13 @@ namespace Covid19App.Controllers
             if (id != report.Id)
             {
                 return NotFound();
+            }
+
+            if (DateExists(report))
+            {
+                ViewBag.Countries = new SelectList(_context.Countries, "Id", "Name");
+                ModelState.AddModelError(string.Empty, $"Für {_context.Countries.Find(report.CountryId).Name} wurde {report.Date.ToString("d.MM.yyyy")} bereits registriert");
+                return View(report);
             }
 
             if (!ModelState.IsValid)
@@ -112,11 +126,6 @@ namespace Covid19App.Controllers
             return RedirectToAction("Index");
         }
 
-        private bool ReportExists(int id)
-        {
-            return _context.Reports.Any(e => e.Id == id);
-        }
-
         public IActionResult Index()
         {
             return View(_context.Reports
@@ -141,5 +150,16 @@ namespace Covid19App.Controllers
 
             return View(report);
         }
+        
+        private bool ReportExists(int id)
+        {
+            return _context.Reports.Any(e => e.Id == id);
+        }
+
+        private bool DateExists(Report report)
+        {
+            return _context.Reports.Any(e => e.Date == report.Date && e.CountryId == report.CountryId && e.Id != report.Id);
+        }
+        
     }
 }
