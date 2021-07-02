@@ -16,26 +16,13 @@ namespace Covid19App.Controllers
         {
             _context = context;
         }
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(await _context.Reports
+            return View(_context.Reports
                 .Include(x=> x.Country)
                 .ThenInclude(x => x.Continent)
-                .ToListAsync()
+                .ToList()
             );
-        }
-
-        public IActionResult Statistics()
-        {
-            if (!_context.Continents.Any() || !_context.Countries.Any() || !_context.Reports.Any())
-            {
-                return RedirectToAction(nameof(Error));
-            }
-
-            var reportList = _context.Reports.Include(x => x.Country).ToList();
-            var statisticList = new StatisticsViewModel();
-            
-            return View(statisticList);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -43,7 +30,6 @@ namespace Covid19App.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-
-
+        
     }
 }
