@@ -9,7 +9,6 @@ namespace Covid19App.Models
         public int Id { get; set; }
         
         [Display(Name = "Land")]
-        [Required(ErrorMessage = "Der Name des Landes ist erforderlich!")]
         [StringLength(100, ErrorMessage = "Max. ist 50 Zeichen.")]
         public string Name { get; set; }
         
@@ -17,11 +16,9 @@ namespace Covid19App.Models
         public string IsoCode { get; set; }
         
         [Display(Name = "Anzahl Einwohner")]
-        [Required(ErrorMessage = "Die Anzahl Einwohner ist erfoderlich!")]
         public int Population { get; set; }
         
         [Display(Name = "Kontinent")]
-        [Required(ErrorMessage = "Der Kontinent ist erforderlich!")]
         [ForeignKey("ContinentId")]
         public virtual Continent Continent { get; set; }
         

@@ -16,88 +16,84 @@ namespace Covid19App.Controllers
         {
             _context = context;
         }
-        
+
         public IActionResult Create()
         {
             if (!_context.Countries.Any())
             {
                 return RedirectToAction("Error", "Home");
             }
-
-            var report = new Report();
-            ViewBag.Countries = new SelectList(_context.Countries, "Id", "Name", _context.Countries.FirstOrDefault().Name);
-            return View(report);
+            ViewBag.Countries = new SelectList(_context.Countries, "Id", "Name");
+            return View();
         }
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name")] Report report)
+        public IActionResult Create(Report report)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                _context.Add(report);
-                await _context.SaveChangesAsync();
-                return RedirectToAction("Index");
+                return View(report);
             }
-            return View(report);
+            _context.Add(report);
+            _context.SaveChanges();
+            return RedirectToAction("Index");
         }
-        
-        public async Task<IActionResult> Edit(int? id)
+
+        public IActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var report = await _context.Reports.FindAsync(id);
+            var report = _context.Reports.Find(id);
             if (report == null)
             {
                 return NotFound();
             }
+
             return View(report);
         }
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] Report report)
+        public IActionResult Edit(int id, Report report)
         {
             if (id != report.Id)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(report);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ReportExists(report.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction("Index");
+                return View(report);
             }
-            return View(report);
+
+            try
+            {
+                _context.Update(report);
+                _context.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ReportExists(report.Id))
+                {
+                    return NotFound();
+                }
+            }
+
+            return RedirectToAction("Index");
         }
-        
-        public async Task<IActionResult> Delete(int? id)
+
+        public IActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var report = await _context.Reports
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var report = _context.Reports.FirstOrDefault(m => m.Id == id);
             if (report == null)
             {
                 return NotFound();
@@ -105,14 +101,14 @@ namespace Covid19App.Controllers
 
             return View(report);
         }
-        
+
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(int id)
         {
-            var report = await _context.Reports.FindAsync(id);
+            var report = _context.Reports.Find(id);
             _context.Reports.Remove(report);
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
             return RedirectToAction("Index");
         }
 
@@ -120,25 +116,24 @@ namespace Covid19App.Controllers
         {
             return _context.Reports.Any(e => e.Id == id);
         }
-        
-        public async Task<IActionResult> Index()
+
+        public IActionResult Index()
         {
-            return View(await _context.Reports
-                .Include(x=> x.Country)
+            return View(_context.Reports
+                .Include(x => x.Country)
                 .ThenInclude(x => x.Continent)
-                .ToListAsync()
+                .ToList()
             );
         }
-        
-        public async Task<IActionResult> Details(int? id)
+
+        public IActionResult Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var report = await _context.Reports
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var report = _context.Reports.FirstOrDefault(m => m.Id == id);
             if (report == null)
             {
                 return NotFound();

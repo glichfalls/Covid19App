@@ -9,7 +9,6 @@ namespace Covid19App.Models
         public int Id { get; set; }
         
         [Display(Name = "Kontinent")]
-        [Required(ErrorMessage = "Der Name ist erfoderlich")]
         [StringLength(50)]
         public string Name { get; set; }
     }

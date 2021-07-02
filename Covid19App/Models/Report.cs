@@ -35,7 +35,6 @@ namespace Covid19App.Models
         public float ReproductionRate { get; set; }
         
         [Display(Name = "Land")]
-        [Required(ErrorMessage = "Das Land ist erforderlich!")]
         [ForeignKey("CountryId")]
         public virtual Country Country { get; set; }
         

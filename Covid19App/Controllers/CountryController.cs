@@ -30,15 +30,14 @@ namespace Covid19App.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IsoCode,Name,Population,ContinentId")] Country country)
+        public IActionResult Create(Country country)
         {
-            Console.WriteLine(country.ToString());
             if (!ModelState.IsValid)
             {
                 return View(country);
             }
             _context.Add(country);
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
             return RedirectToAction("Index");
         }
         
@@ -59,33 +58,20 @@ namespace Covid19App.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Country country)
+        public IActionResult Edit(int id, Country country)
         {
             if (id != country.Id)
             {
                 return NotFound();
             }
-            
-            country.Continent = _context.Continents.FirstOrDefault(x => x.Id == country.Continent.Id);
-
-            if (country.Continent != null)
-            {
-                country.ContinentId = country.Continent.Id;
-            }
-            else
-            {
-                return View();
-            }
-
             if (!ModelState.IsValid)
             {
                 return View();
             }
-            
             try
             {
                 _context.Update(country);
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -94,9 +80,7 @@ namespace Covid19App.Controllers
                     return NotFound();
                 }
             }
-            
             return RedirectToAction("Index");
-            
         }
         
         public async Task<IActionResult> Delete(int? id)

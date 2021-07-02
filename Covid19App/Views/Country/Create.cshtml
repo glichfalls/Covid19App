@@ -20,8 +20,8 @@
             </div>
             <div class="form-group">
                 <label asp-for="Continent" class="control-label"></label>
-                <select asp-for="Continent.Id" asp-items="@ViewBag.Continents" class="form-control"></select>
-                <input asp-for="Continent.Id" class="form-control" type="hidden" />
+                <select asp-for="ContinentId" asp-items="@ViewBag.Continents" class="form-control"></select>
+                <input asp-for="ContinentId" class="form-control" type="hidden" />
                 <span asp-validation-for="Continent.Name" class="text-danger"></span>
             </div>
             <div class="form-group">
